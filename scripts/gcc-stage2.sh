@@ -46,19 +46,33 @@ mkdir -p ${SRC_DIR}
 #-----------------------------------------------------------------------------
 
 gcc_configure () {
-`realpath --relative-to=./ ${SRC_DIR}/${GCC_DIR}`/configure \
-    --prefix=${INSTALL_DIR} \
-    --program-prefix=${PROGRAM_PREFIX} \
-    --target=${TARGET} \
-    --enable-lto \
-    --enable-languages=c,c++ \
-    --with-arch=m68k \
-    --with-cpu=${WITH_CPU} \
-    --with-newlib \
-    --enable-multilib \
-    --disable-shared \
-    --disable-threads \
-
+if [ "$MACOS" == "1" ]; then
+    `realpath ${SRC_DIR}/${GCC_DIR}`/configure \
+        --prefix=${INSTALL_DIR} \
+        --program-prefix=${PROGRAM_PREFIX} \
+        --target=${TARGET} \
+        --enable-lto \
+        --enable-languages=c,c++ \
+        --with-arch=m68k \
+        --with-cpu=${WITH_CPU} \
+        --with-newlib \
+        --enable-multilib \
+        --disable-shared \
+        --disable-threads
+else
+    `realpath --relative-to=./ ${SRC_DIR}/${GCC_DIR}`/configure \
+        --prefix=${INSTALL_DIR} \
+        --program-prefix=${PROGRAM_PREFIX} \
+        --target=${TARGET} \
+        --enable-lto \
+        --enable-languages=c,c++ \
+        --with-arch=m68k \
+        --with-cpu=${WITH_CPU} \
+        --with-newlib \
+        --enable-multilib \
+        --disable-shared \
+        --disable-threads
+fi
 }
 
 #	libstdc++.a のみを縮小版 (-fno-rtti -fno-exceptions) でビルド、インストールする

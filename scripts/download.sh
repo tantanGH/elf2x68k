@@ -37,7 +37,7 @@ cd ${DOWNLOAD_DIR}
 #-----------------------------------------------------------------------------
 
 wget -nc ${BINUTILS_URL}
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$MACOS" == "1" ]; then
     if [ "$(shasum -a 512 ${BINUTILS_ARCHIVE} | awk '{print $1}')" != "${BINUTILS_SHA512SUM}" ]; then
 		echo "SHA512SUM verification of ${BINUTILS_ARCHIVE} failed!"
 		exit 1
@@ -54,7 +54,7 @@ fi
 #-----------------------------------------------------------------------------
 
 wget -nc ${GCC_URL}
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$MACOS" == "1" ]; then
 	if [ "$(shasum -a 512 ${GCC_ARCHIVE} | awk '{print $1}')" != "${GCC_SHA512SUM}" ]; then
 		echo "SHA512SUM verification of ${GCC_ARCHIVE} failed!"
 		exit 1
@@ -84,8 +84,12 @@ fi
 # newlib のダウンロード
 #-----------------------------------------------------------------------------
 
-wget --inet4-only -nc ${NEWLIB_URL}
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$MACOS" == "1" ]; then
+	wget --inet4-only -nc ${NEWLIB_URL}
+else
+	wget -nc ${NEWLIB_URL}
+fi
+if [ "$MACOS" == "1" ]; then
 	if [ "$(shasum -a 512 ${NEWLIB_ARCHIVE} | awk '{print $1}')" != "${NEWLIB_SHA512SUM}" ]; then
 		echo "SHA512SUM verification of ${NEWLIB_ARCHIVE} failed!"
 		exit 1

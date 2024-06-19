@@ -55,7 +55,7 @@ cd ${SRC_DIR}/${GCC_DIR}
 ./contrib/download_prerequisites
 
 cd ${BUILD_DIR}/${GCC_DIR}_stage1
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$MACOS" == "1" ]; then
     `realpath ${SRC_DIR}/${GCC_DIR}`/configure \
         --prefix=${INSTALL_DIR} \
         --program-prefix=${PROGRAM_PREFIX} \
