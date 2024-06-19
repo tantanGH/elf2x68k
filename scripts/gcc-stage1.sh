@@ -55,19 +55,35 @@ cd ${SRC_DIR}/${GCC_DIR}
 ./contrib/download_prerequisites
 
 cd ${BUILD_DIR}/${GCC_DIR}_stage1
-`realpath --relative-to=./ ${SRC_DIR}/${GCC_DIR}`/configure \
-    --prefix=${INSTALL_DIR} \
-    --program-prefix=${PROGRAM_PREFIX} \
-    --target=${TARGET} \
-    --enable-lto \
-    --enable-languages=c \
-    --without-headers \
-    --with-arch=m68k \
-    --with-cpu=${WITH_CPU} \
-    --with-newlib \
-    --enable-multilib \
-    --disable-shared \
-    --disable-threads \
+if [ "$(uname)" == "Darwin" ]; then
+    `realpath ${SRC_DIR}/${GCC_DIR}`/configure \
+        --prefix=${INSTALL_DIR} \
+        --program-prefix=${PROGRAM_PREFIX} \
+        --target=${TARGET} \
+        --enable-lto \
+        --enable-languages=c \
+        --without-headers \
+        --with-arch=m68k \
+        --with-cpu=${WITH_CPU} \
+        --with-newlib \
+        --enable-multilib \
+        --disable-shared \
+        --disable-threads
+else
+    `realpath --relative-to=./ ${SRC_DIR}/${GCC_DIR}`/configure \
+        --prefix=${INSTALL_DIR} \
+        --program-prefix=${PROGRAM_PREFIX} \
+        --target=${TARGET} \
+        --enable-lto \
+        --enable-languages=c \
+        --without-headers \
+        --with-arch=m68k \
+        --with-cpu=${WITH_CPU} \
+        --with-newlib \
+        --enable-multilib \
+        --disable-shared \
+        --disable-threads
+fi
 
 make -j${NUM_PROC} all-gcc 2<&1 | tee build.gcc-stage1.1.log
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
